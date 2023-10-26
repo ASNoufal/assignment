@@ -14,5 +14,5 @@ final firebasefirestoreprovider =
     Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
 
 /// from the authentication class that was implement from iauthservice
-final authDataSourceProvider = Provider<Authentication>((ref) =>
-    Authentication(firebaseAuth: ref.read(firebaseauthprovider), ref: ref));
+// final authDataSourceProvider = Provider<Authentication>((ref) =>
+//     Authentication(firebaseAuth: ref.read(firebaseauthprovider), ref: ref));

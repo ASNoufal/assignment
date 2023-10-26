@@ -2,54 +2,54 @@
 import 'package:assignment/infrastructure/core/provider/providers.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:riverpod/src/framework.dart';
 
 import 'package:assignment/domain/auth/auth.dart';
 import 'package:assignment/domain/authfailures/authfailures.dart';
 
-class Authentication implements Iauthservice {
-  FirebaseAuth firebaseAuth;
-  Ref ref;
-  Authentication({
-    required this.firebaseAuth,
-    required this.ref,
-  });
+class Authentication extends Iauthservice {
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   @override
-  Future<Either<Authfailures, User>> registerusernameandpassword({
+  Future<UserCredential> registerusernameandpassword({
     required String email,
     required String password,
   }) async {
     try {
       final response = await firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return right(response.user!);
+      return response;
     } on FirebaseAuthException catch (e) {
-      if (e.code == "email-already-in-use") {
-        return left(Authfailures.emailalreadyinuse(e.toString()));
-      } else if (e.code == "invalid-email" || e.code == "weak-password") {
-        return left(Authfailures.emailalreadyinuse(e.toString()));
-      } else {
-        return left(Authfailures.clienterror(e.toString()));
-      }
+      print(e);
+      throw Future.error(e);
     }
   }
 
   @override
-  Future<Either<Authfailures, User?>> signinusernameandpassword(
+  Future<UserCredential> signinusernameandpassword(
       {required String email, required String password}) async {
     try {
       final response = await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      return right(response.user);
+      return response;
     } on FirebaseAuthException catch (e) {
-      if (e.code == "invalid-email" ||
-          e.code == "wrong-password" ||
-          e.code == "user-not-found") {
-        return left(Authfailures.emailandpasswordwrong(e.toString()));
-      } else {
-        return left(Authfailures.clienterror(e.toString()));
-      }
+      print(e);
+      throw Future.error(e);
+    }
+  }
+
+  @override
+  void logout() {
+    firebaseAuth.signOut();
+  }
+
+  @override
+  bool isuserlogin() {
+    if (firebaseAuth.currentUser != null) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

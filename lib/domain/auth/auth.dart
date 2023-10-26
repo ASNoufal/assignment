@@ -4,10 +4,30 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class Iauthservice {
-  Future<Either<Authfailures, User>> registerusernameandpassword({
+  Future<UserCredential> registerusernameandpassword({
     required String email,
     required String password,
   });
-  Future<Either<Authfailures, User?>> signinusernameandpassword(
+  Future<UserCredential> signinusernameandpassword(
       {required String email, required String password});
+
+  void logout();
+  bool isuserlogin();
+}
+
+abstract class Istoreservice {
+  Future adddatatofirestore(
+      {required Map<String, dynamic> data,
+      required String collectionname,
+      required String docname});
+
+  Future updatedatafromfirestore(
+      {required Map<String, dynamic> data,
+      required String collectionname,
+      required String docname});
+
+  Future getdatafromfirestore(
+      {required Map<String, dynamic> data,
+      required String collectionaname,
+      required String docname});
 }
