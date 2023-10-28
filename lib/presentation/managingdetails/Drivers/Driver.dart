@@ -12,6 +12,7 @@ import 'package:assignment/presentation/Navigatingscreen/navigatingscreen.dart';
 import 'package:assignment/presentation/managingdetails/RetailStores/RetailStorescreen.dart';
 
 Map<String, dynamic> datamap = {};
+final torefreshprovider = StateProvider<bool>((ref) => false);
 
 class Driver extends ConsumerWidget {
   const Driver({super.key});
@@ -19,6 +20,7 @@ class Driver extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var data = ref.watch(driverprovide);
+    ref.watch(torefreshprovider);
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -32,12 +34,14 @@ class Driver extends ConsumerWidget {
           child: FutureBuilder<List<Map<String, dynamic>>?>(
               future: getdatas(),
               builder: (context, snapshot) {
+                ref.read(torefreshprovider);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text("Error: ${snapshot.error}"));
                 } else if (snapshot.hasData) {
                   final datalist = snapshot.data;
+
                   return ListView.builder(
                     itemCount: datalist?.length ?? 0,
                     itemBuilder: (context, index) {
@@ -47,7 +51,9 @@ class Driver extends ConsumerWidget {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (builder) {
-                              return UpdatePage();
+                              return UpdatePage(
+                                data: data,
+                              );
                             }));
                           },
                           child: ListTile(
