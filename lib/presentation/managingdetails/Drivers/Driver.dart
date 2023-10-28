@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:assignment/application/model/datamodel.dart';
+import 'package:assignment/presentation/managingdetails/Drivers/updatepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,10 +14,7 @@ import 'package:assignment/presentation/managingdetails/RetailStores/RetailStore
 Map<String, dynamic> datamap = {};
 
 class Driver extends ConsumerWidget {
-  String? firstname;
-  Driver({
-    this.firstname,
-  });
+  const Driver({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,8 +24,7 @@ class Driver extends ConsumerWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
           onPressed: () {
-            context.navigationtoscreen(
-                child: const DriversData(), isreplace: true);
+            context.navigationtoscreen(child: DriversData(), isreplace: true);
           },
           child: Text("Add Drivers")),
       body: Column(children: [
@@ -36,7 +33,7 @@ class Driver extends ConsumerWidget {
               future: getdatas(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text("Error: ${snapshot.error}"));
                 } else if (snapshot.hasData) {
@@ -45,15 +42,25 @@ class Driver extends ConsumerWidget {
                     itemCount: datalist?.length ?? 0,
                     itemBuilder: (context, index) {
                       final data = datalist![index];
-                      return ListTile(
-                        title: Text(data['name']),
+                      return Card(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (builder) {
+                              return UpdatePage();
+                            }));
+                          },
+                          child: ListTile(
+                            title: Text(data['name']),
 
-                        // Add more fields as needed
+                            // Add more fields as needed
+                          ),
+                        ),
                       );
                     },
                   );
                 } else {
-                  return Center(child: Text("No data available"));
+                  return const Center(child: Text("No data available"));
                 }
               }),
         )
@@ -92,12 +99,13 @@ Widget builduser(Datamodel datamodel) {
 }
 
 class DriversData extends ConsumerWidget {
-  const DriversData({super.key});
+  DriversData({super.key, required});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(driverprovide);
     final driverdatacontroller = TextEditingController();
+
+    final data = ref.watch(driverprovide);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Driver"),
