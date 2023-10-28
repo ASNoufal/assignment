@@ -52,7 +52,9 @@ class Authprovider extends ChangeNotifier {
       String uuid = _userCredential.user!.uid;
 
       issucess = await fstore.adddatatofirestore(
-          data: data, collectionname: "user", docname: uuid);
+        data: data,
+        collectionname: "user",
+      );
 
       _isloading = false;
       notifyListeners();

@@ -3,6 +3,7 @@ import 'package:assignment/domain/stateauth/authentication_provider.dart';
 import 'package:assignment/domain/stateauth/authentication_state.dart';
 import 'package:assignment/presentation/Login/const.dart';
 import 'package:assignment/presentation/home/homepage.dart';
+import 'package:assignment/presentation/managingdetails/RetailStores/RetailStorescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
