@@ -3,10 +3,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Firestoreprovider extends ChangeNotifier {
-  Future createdata({required String name, required String collection}) async {
+  ///map location need to get in the createdata. so i need to assign the name or location geonumber in the app
+  ///currently i am updating in firestore after making the map and geolocator and integrating the map i can do.
+  Future createdata({
+    required String name,
+    required String collection,
+  }) async {
     final docuser = FirebaseFirestore.instance.collection(collection).doc();
 
-    final user = Datamodel(id: docuser.id, name: name);
+    final user = Datamodel(
+      id: docuser.id,
+      name: name,
+    );
 
     await docuser.set(user.toJson());
     notifyListeners();
