@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
                         style: GoogleFonts.acme(fontSize: 25)),
                   )
                 ]),
-            Expanded(
+            const Expanded(
               child: TabBarView(
                 children: <Widget>[Driver(), RetailStore()],
               ),

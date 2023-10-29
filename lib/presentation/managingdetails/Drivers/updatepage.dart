@@ -1,7 +1,9 @@
-import 'package:assignment/presentation/managingdetails/Drivers/Driver.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:assignment/infrastructure/driverdatafirestore/Driverdata.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final firestoredataprovider =
+    ChangeNotifierProvider<Firestoreprovider>((ref) => Firestoreprovider());
 
 class UpdatePage extends ConsumerWidget {
   const UpdatePage({super.key, required this.data});
@@ -13,7 +15,7 @@ class UpdatePage extends ConsumerWidget {
     final updatdata = TextEditingController(text: data["name"]);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Update"),
+        title: const Text("Update"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -27,24 +29,21 @@ class UpdatePage extends ConsumerWidget {
             ElevatedButton(
                 onPressed: () {
                   final data = {"name": updatdata.text};
-
-                  ref.read(torefreshprovider.notifier).update(
-                        (state) => true,
-                      );
-                  updatedata(datas: data, doc: uuid)
+                  ref
+                      .read(firestoredataprovider.notifier)
+                      .updatedata(
+                        datas: data,
+                        doc: uuid,
+                        collection: "userdriver",
+                      )
                       .then((value) => Navigator.pop(context));
+                  // updatedata(datas: data, doc: uuid)
+                  // .then((value) => Navigator.pop(context));
                 },
                 child: const Text("update"))
           ],
         ),
       ),
     );
-  }
-
-  Future<void> updatedata(
-      {required Map<String, dynamic> datas, required String doc}) async {
-    final data = FirebaseFirestore.instance.collection("userdriver").doc(doc);
-
-    final snapshot = await data.update(datas);
   }
 }

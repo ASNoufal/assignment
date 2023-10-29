@@ -6,15 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class Driversprovider extends ChangeNotifier {
   Driverdata driver = Driverdata();
 
-  Future<void> adddata(
-      {required Map<String, dynamic> data,
-      required String collectionname,
-      required String docname}) async {
-    final response = await driver.adddatatofirestore(
-      data: data,
-      collectionname: collectionname,
-    );
-  }
+  /// notusing for reference
 
   Future getdata(
       {required Map<String, dynamic> data,
