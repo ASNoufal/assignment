@@ -2,7 +2,7 @@ import 'package:assignment/infrastructure/auth/firebaseauth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final firebaseauthprovider =
     Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);

@@ -25,7 +25,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.assignment"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -69,5 +69,6 @@ flutter {
 
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
+
 
 }

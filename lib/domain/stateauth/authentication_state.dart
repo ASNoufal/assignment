@@ -1,7 +1,7 @@
 import 'package:assignment/domain/stateauth/User_login_entity.dart';
 import 'package:assignment/domain/stateauth/field.dart';
 import 'package:assignment/domain/stateauth/user_login_form_state.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Userloginformstate extends StateNotifier<UserLoginFormState> {
   Userloginformstate() : super(UserLoginFormState(UserLoginEntity.initial()));

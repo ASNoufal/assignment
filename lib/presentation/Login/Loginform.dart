@@ -2,10 +2,12 @@ import 'package:assignment/domain/authfailures/authfailures.dart';
 import 'package:assignment/domain/stateauth/authentication_provider.dart';
 import 'package:assignment/domain/stateauth/authentication_state.dart';
 import 'package:assignment/presentation/Login/const.dart';
+import 'package:assignment/presentation/NavigationPage/geolocation.dart';
 import 'package:assignment/presentation/home/homepage.dart';
 import 'package:assignment/presentation/managingdetails/RetailStores/RetailStorescreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Loginform extends ConsumerWidget {
   const Loginform({super.key});
@@ -74,11 +76,20 @@ class Loginform extends ConsumerWidget {
                                 .read(authProvider.notifier)
                                 .loginwithemailandpassword(
                                     email.text, password.text)
-                                .then((value) =>
-                                    Navigator.pushReplacement(context,
-                                        MaterialPageRoute(builder: (builder) {
-                                      return HomePage();
-                                    })));
+                                .then((value) {
+                              if (FirebaseAuth.instance.currentUser!.uid ==
+                                  "n7jvYfM2KSV4ObQV5uxiTiFsIY22") {
+                                Navigator.pushReplacement(context,
+                                    MaterialPageRoute(builder: (builder) {
+                                  return const HomePage();
+                                }));
+                              } else {
+                                Navigator.pushReplacement(context,
+                                    MaterialPageRoute(builder: (builder) {
+                                  return const Mymap();
+                                }));
+                              }
+                            });
                           }
                         },
                         child: customisedbutton(context, "Login"))

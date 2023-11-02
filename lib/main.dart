@@ -1,10 +1,12 @@
 import 'package:assignment/presentation/Login/Loginpage.dart';
+import 'package:assignment/presentation/NavigationPage/geolocation.dart';
 import 'package:assignment/presentation/home/homepage.dart';
 import 'package:assignment/presentation/landingpage/landingpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -12,6 +14,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await dotenv.load(fileName: "assets/.env");
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -27,3 +30,7 @@ class MyApp extends StatelessWidget {
             : LoginPage());
   }
 }
+
+
+
+// Mymap();

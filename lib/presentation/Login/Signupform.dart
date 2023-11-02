@@ -5,7 +5,7 @@ import 'package:assignment/presentation/Login/Loginpage.dart';
 import 'package:assignment/presentation/Login/const.dart';
 import 'package:assignment/presentation/home/homepage.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Signupform extends ConsumerWidget {
   const Signupform({super.key});

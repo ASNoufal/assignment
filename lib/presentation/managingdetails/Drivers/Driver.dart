@@ -4,9 +4,9 @@ import 'package:assignment/application/model/datamodel.dart';
 import 'package:assignment/presentation/Login/Loginform.dart';
 import 'package:assignment/presentation/managingdetails/Drivers/updatepage.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:assignment/presentation/Navigatingscreen/navigatingscreen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Driver extends ConsumerStatefulWidget {
   const Driver({super.key});

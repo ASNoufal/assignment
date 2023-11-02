@@ -1,7 +1,7 @@
 import 'package:assignment/infrastructure/auth/driversfirestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Driversprovider extends ChangeNotifier {
   Driverdata driver = Driverdata();
