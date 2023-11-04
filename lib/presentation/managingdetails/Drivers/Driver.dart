@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:assignment/presentation/Navigatingscreen/navigatingscreen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+String? intial = "Select the store";
+
 class Driver extends ConsumerStatefulWidget {
   const Driver({super.key});
 
@@ -17,6 +19,8 @@ class Driver extends ConsumerStatefulWidget {
 
 class _DriverState extends ConsumerState<Driver> {
   @override
+  String? dropdownValue;
+
   Widget build(BuildContext context) {
     ref.watch(firestoredataprovider).getdatas;
     ref.watch(firestoredataprovider).deletedata;
@@ -61,6 +65,54 @@ class _DriverState extends ConsumerState<Driver> {
                           },
                           child: ListTile(
                             title: Text(data['name']),
+                            subtitle: FutureBuilder(
+                                future: ref
+                                    .read(firestoredataprovider)
+                                    .getdatas(collection: "retaildata"),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (snapshot.hasError) {
+                                    return Center(
+                                        child:
+                                            Text("Error: ${snapshot.error}"));
+                                  } else if (snapshot.hasData) {
+                                    final datalist = snapshot.data;
+                                    final data = datalist!.map((e) {
+                                      return e["name"];
+                                    }).toList();
+                                    print(data.toString());
+
+                                    print(data.runtimeType);
+                                    print("needt o know");
+                                    final dropdownprovider =
+                                        StateProvider<String?>(
+                                            (ref) => dropdownValue);
+                                    return Consumer(builder: (context, ref, _) {
+                                      ref.watch(dropdownprovider);
+
+                                      return DropdownButton<String>(
+                                        value: ref.watch(dropdownprovider),
+                                        onChanged: ((value) {
+                                          ref
+                                              .read(dropdownprovider.notifier)
+                                              .state = value;
+                                        }),
+                                        items: data
+                                            .map<DropdownMenuItem<String>>(
+                                                (value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      );
+                                    });
+                                  }
+                                  return SizedBox();
+                                }),
                             trailing: IconButton(
                                 onPressed: () {
                                   ref.read(firestoredataprovider).deletedata(
