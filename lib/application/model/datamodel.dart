@@ -4,6 +4,7 @@ class Datamodel {
   final String mapdetailsforretailer;
   final String lat;
   final String lon;
+  final String storename;
 
   Datamodel({
     required this.id,
@@ -11,6 +12,7 @@ class Datamodel {
     this.mapdetailsforretailer = '',
     this.lat = '',
     this.lon = '',
+    this.storename = '',
   });
 
   Map<String, dynamic> toJson() {
@@ -19,7 +21,8 @@ class Datamodel {
       "name": name,
       "mapdetailsforretailer": mapdetailsforretailer,
       "lat": lat,
-      "lon": lon
+      "lon": lon,
+      "storename": storename
     };
   }
 

@@ -1,11 +1,13 @@
 import 'package:assignment/application/model/datamodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Firestoreprovider extends ChangeNotifier {
   ///map location need to get in the createdata. so i need to assign the name or location geonumber in the app
   ///currently i am updating in firestore after making the map and geolocator and integrating the map i can do.
   Future createdata({
+    String? storename,
     String? lon,
     String? lat,
     required String name,
@@ -16,8 +18,9 @@ class Firestoreprovider extends ChangeNotifier {
     final user = Datamodel(
       id: docuser.id,
       name: name,
-      lon: lon!,
-      lat: lat!,
+      lon: lon ?? " ",
+      lat: lat ?? '',
+      storename: storename ?? '',
     );
 
     await docuser.set(user.toJson());
@@ -59,7 +62,8 @@ class Firestoreprovider extends ChangeNotifier {
     var docSnapshot = await collection.doc(toGetthelatandlon).get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
-      var value = data?['lat'];
+      var value = data;
+
       return value;
     }
   }

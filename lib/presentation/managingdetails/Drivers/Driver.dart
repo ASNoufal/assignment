@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:assignment/presentation/Navigatingscreen/navigatingscreen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 String? intial = "Select the store";
 
@@ -26,6 +27,7 @@ class _DriverState extends ConsumerState<Driver> {
   String? dropdownname;
   String? lat;
   String? lon;
+  Color color = Colors.white;
 
   Widget build(BuildContext context) {
     ref.watch(firestoredataprovider).getdatas;
@@ -59,7 +61,8 @@ class _DriverState extends ConsumerState<Driver> {
                       final data = datalist![index];
 
                       return Card(
-                        shape: LinearBorder(),
+                        color: color,
+                        shape: const LinearBorder(),
                         child: InkWell(
                             onTap: () {
                               print("back to push page");
@@ -152,15 +155,25 @@ class _DriverState extends ConsumerState<Driver> {
                                         onPressed: () async {
                                           print(id);
                                           print("ididididididididid");
-                                          var data = await ref
+                                          var latandlon = await ref
                                               .read(firestoredataprovider
                                                   .notifier)
                                               .getdatafromtheid(
                                                   toGetthelatandlon: id!);
 
-                                          print(data.toString());
-                                          print("////");
+                                          await ref
+                                              .read(firestoredataprovider)
+                                              .createdata(
+                                                collection:
+                                                    "getdriverdatatodeliver",
+                                                name: data['name'],
+                                                lat: latandlon['lat'],
+                                                lon: latandlon['lon'],
+                                                storename: latandlon['name'],
+                                              );
 
+                                          print("////");
+                                          ////////
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                                   content: Text(
