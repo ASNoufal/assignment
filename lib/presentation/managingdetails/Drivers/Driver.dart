@@ -1,12 +1,14 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'package:assignment/application/model/datamodel.dart';
-import 'package:assignment/presentation/Login/Loginform.dart';
 import 'package:assignment/presentation/managingdetails/Drivers/updatepage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:assignment/presentation/Navigatingscreen/navigatingscreen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 String? intial = "Select the store";
 
@@ -19,7 +21,11 @@ class Driver extends ConsumerStatefulWidget {
 
 class _DriverState extends ConsumerState<Driver> {
   @override
+  String? id;
   String? dropdownValue;
+  String? dropdownname;
+  String? lat;
+  String? lon;
 
   Widget build(BuildContext context) {
     ref.watch(firestoredataprovider).getdatas;
@@ -53,77 +59,120 @@ class _DriverState extends ConsumerState<Driver> {
                       final data = datalist![index];
 
                       return Card(
+                        shape: LinearBorder(),
                         child: InkWell(
-                          onTap: () {
-                            print("back to push page");
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (builder) {
-                              return UpdatePage(
-                                data: data,
-                              );
-                            }));
-                          },
-                          child: ListTile(
-                            title: Text(data['name']),
-                            subtitle: FutureBuilder(
-                                future: ref
-                                    .read(firestoredataprovider)
-                                    .getdatas(collection: "retaildata"),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (snapshot.hasError) {
-                                    return Center(
-                                        child:
-                                            Text("Error: ${snapshot.error}"));
-                                  } else if (snapshot.hasData) {
-                                    final datalist = snapshot.data;
-                                    final data = datalist!.map((e) {
-                                      return e["name"];
-                                    }).toList();
-                                    print(data.toString());
-
-                                    print(data.runtimeType);
-                                    print("needt o know");
-                                    final dropdownprovider =
-                                        StateProvider<String?>(
-                                            (ref) => dropdownValue);
-                                    return Consumer(builder: (context, ref, _) {
-                                      ref.watch(dropdownprovider);
-
-                                      return DropdownButton<String>(
-                                        value: ref.watch(dropdownprovider),
-                                        onChanged: ((value) {
+                            onTap: () {
+                              print("back to push page");
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (builder) {
+                                return UpdatePage(
+                                  data: data,
+                                );
+                              }));
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Name:- ${data['name'].toString().toUpperCase()}',
+                                      style: GoogleFonts.harmattan(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Spacer(),
+                                    IconButton(
+                                        onPressed: () {
                                           ref
-                                              .read(dropdownprovider.notifier)
-                                              .state = value;
-                                        }),
-                                        items: data
-                                            .map<DropdownMenuItem<String>>(
-                                                (value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      );
-                                    });
-                                  }
-                                  return SizedBox();
-                                }),
-                            trailing: IconButton(
-                                onPressed: () {
-                                  ref.read(firestoredataprovider).deletedata(
-                                      doc: data['id'],
-                                      collection: "userdriver");
-                                },
-                                icon: const Icon(Icons.delete)),
+                                              .read(firestoredataprovider)
+                                              .deletedata(
+                                                  doc: data['id'],
+                                                  collection: "userdriver");
+                                        },
+                                        icon: const Icon(CupertinoIcons.delete))
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    FutureBuilder(
+                                        future: ref
+                                            .read(firestoredataprovider)
+                                            .getdatas(collection: "retaildata"),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                                child: Text(
+                                                    "Error: ${snapshot.error}"));
+                                          } else if (snapshot.hasData) {
+                                            final datalist = snapshot.data;
+                                            final retaildata =
+                                                datalist!.map((e) {
+                                              return e;
+                                            }).toList();
 
-                            // Add more fields as needed
-                          ),
-                        ),
+                                            final dropdownprovider =
+                                                StateProvider<String?>(
+                                                    (ref) => dropdownValue);
+                                            return Consumer(
+                                                builder: (context, ref, _) {
+                                              return DropdownButton<String>(
+                                                hint: const Text("Retailstore"),
+                                                value:
+                                                    ref.watch(dropdownprovider),
+                                                onChanged: ((value) {
+                                                  id = ref
+                                                      .read(dropdownprovider
+                                                          .notifier)
+                                                      .state = value;
+                                                }),
+                                                items: retaildata.map<
+                                                    DropdownMenuItem<
+                                                        String>>((values) {
+                                                  print(id);
+                                                  print("0909090");
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: values['id'],
+                                                    child: Text(values['name']),
+                                                  );
+                                                }).toList(),
+                                              );
+                                            });
+                                          }
+                                          return const SizedBox();
+                                        }),
+                                    const Spacer(),
+                                    ElevatedButton.icon(
+                                        onPressed: () async {
+                                          print(id);
+                                          print("ididididididididid");
+                                          var data = await ref
+                                              .read(firestoredataprovider
+                                                  .notifier)
+                                              .getdatafromtheid(
+                                                  toGetthelatandlon: id!);
+
+                                          print(data.toString());
+                                          print("////");
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "Added Succesfully")));
+                                        },
+                                        icon: const Icon(
+                                            CupertinoIcons.arrow_down_doc_fill),
+                                        label: const Text("Submit"))
+                                  ],
+                                ),
+                              ],
+                            )),
                       );
                     },
                   );
@@ -148,8 +197,6 @@ class DriversData extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print("dataaa");
-    print("+++++++++");
     final driverdatacontroller = TextEditingController();
 
     return Scaffold(

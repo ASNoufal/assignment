@@ -6,6 +6,8 @@ class Firestoreprovider extends ChangeNotifier {
   ///map location need to get in the createdata. so i need to assign the name or location geonumber in the app
   ///currently i am updating in firestore after making the map and geolocator and integrating the map i can do.
   Future createdata({
+    String? lon,
+    String? lat,
     required String name,
     required String collection,
   }) async {
@@ -14,6 +16,8 @@ class Firestoreprovider extends ChangeNotifier {
     final user = Datamodel(
       id: docuser.id,
       name: name,
+      lon: lon!,
+      lat: lat!,
     );
 
     await docuser.set(user.toJson());
@@ -48,5 +52,15 @@ class Firestoreprovider extends ChangeNotifier {
     final data =
         FirebaseFirestore.instance.collection(collection).doc(doc).delete();
     notifyListeners();
+  }
+
+  getdatafromtheid({required String toGetthelatandlon}) async {
+    var collection = FirebaseFirestore.instance.collection('retaildata');
+    var docSnapshot = await collection.doc(toGetthelatandlon).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      var value = data?['lat'];
+      return value;
+    }
   }
 }
