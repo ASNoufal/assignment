@@ -12,8 +12,12 @@ import 'package:location/location.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+// ignore: must_be_immutable
 class Mymap extends ConsumerStatefulWidget {
-  const Mymap({super.key});
+  Mymap({required this.lat, required this.lon, super.key});
+
+  double? lat;
+  double? lon;
 
   @override
   ConsumerState<Mymap> createState() => _MymapState();
@@ -25,16 +29,22 @@ class _MymapState extends ConsumerState<Mymap> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   static LatLng _googleloc = LatLng(11.254723287414867, 75.77839809303116);
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(11.256897994905298, 75.77827490651264),
-    zoom: 14.4746,
-  );
-  static LatLng _appleplex = LatLng(11.26916629123601, 75.77656128448585);
+
+  LatLng? retailstorelocation;
+  CameraPosition? kGoogleplex;
 
   Map<PolylineId, Polyline> polylines = {};
 
   @override
   void initState() {
+    kGoogleplex = CameraPosition(
+      target: LatLng(widget.lat!, widget.lon!),
+      zoom: 10,
+    );
+    // latitude = widget.lat;
+    // longitude = widget.lon;
+    retailstorelocation = LatLng(widget.lat!, widget.lon!);
+
     getcurrentloction()
         .then((_) => getpolylinepoints())
         .then((value) => generatePolyLinePoints(value));
@@ -42,21 +52,16 @@ class _MymapState extends ConsumerState<Mymap> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green[700],
         title: Text("Map"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                ref.read(authProvider.notifier).signout();
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (builder) {
-                  return const LoginPage();
-                }));
-              },
-              icon: Icon(Icons.exit_to_app))
-        ],
       ),
       body: currentlatlng == null
           ? Center(
@@ -68,16 +73,16 @@ class _MymapState extends ConsumerState<Mymap> {
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                   },
-                  initialCameraPosition: _kGooglePlex,
+                  initialCameraPosition: kGoogleplex!,
                   markers: {
-                    Marker(
-                        markerId: const MarkerId("livelocation"),
-                        icon: BitmapDescriptor.defaultMarker,
-                        position: currentlatlng!),
                     Marker(
                         markerId: const MarkerId("currentlocation"),
                         icon: BitmapDescriptor.defaultMarker,
-                        position: _appleplex),
+                        position: currentlatlng!),
+                    Marker(
+                        markerId: const MarkerId("retailstore"),
+                        icon: BitmapDescriptor.defaultMarker,
+                        position: retailstorelocation!),
                   },
                   polylines: Set<Polyline>.of(polylines.values),
                 ),
@@ -90,8 +95,11 @@ class _MymapState extends ConsumerState<Mymap> {
                     width: double.infinity,
                     height: 100,
                     child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green[300]),
                         onPressed: () {
-                          onmap(_appleplex.latitude, _appleplex.longitude);
+                          onmap(retailstorelocation!.latitude,
+                              retailstorelocation!.longitude);
                         },
                         child: Text("Goto Drive")),
                   ),
@@ -156,7 +164,8 @@ class _MymapState extends ConsumerState<Mymap> {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         apikey,
         PointLatLng(currentlatlng!.latitude, currentlatlng!.longitude),
-        PointLatLng(_appleplex.latitude, _appleplex.longitude),
+        PointLatLng(
+            retailstorelocation!.latitude, retailstorelocation!.longitude),
         travelMode: TravelMode.driving);
     if (result.points.isNotEmpty) {
       result.points.forEach((element) {

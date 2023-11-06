@@ -14,8 +14,10 @@ class RetailStore extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(firestoredataprovider).getdatas;
     return Scaffold(
+      backgroundColor: Colors.green[100],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.green[700]),
           onPressed: () {
             context.navigationtoscreen(
                 child: const RetailStoredata(), isreplace: true);
@@ -39,9 +41,11 @@ class RetailStore extends ConsumerWidget {
                   final data = datalist![index];
 
                   return Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: Colors.green[300],
                     child: InkWell(
                       onTap: () {
-                        print("back to push page");
                         Navigator.push(context,
                             MaterialPageRoute(builder: (builder) {
                           return UpdateRetailer(
@@ -50,7 +54,10 @@ class RetailStore extends ConsumerWidget {
                         }));
                       },
                       child: ListTile(
-                        title: Text(data['name']),
+                        title: Text(
+                          data['name'],
+                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        ),
                         trailing: IconButton(
                             onPressed: () {
                               ref.read(firestoredataprovider).deletedata(
@@ -79,7 +86,9 @@ class RetailStoredata extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final retaildata = TextEditingController();
     return Scaffold(
+      backgroundColor: Colors.green[100],
       floatingActionButton: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.green[700]),
           onPressed: () {
             ref
                 .read(firestoredataprovider.notifier)
@@ -87,7 +96,8 @@ class RetailStoredata extends ConsumerWidget {
                 .then((value) => Navigator.pop(context));
           },
           child: const Text("add details")),
-      appBar: AppBar(title: const Text("Retailstore")),
+      appBar: AppBar(
+          backgroundColor: Colors.green[700], title: const Text("Retailstore")),
       body: Column(
         children: [
           Padding(

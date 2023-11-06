@@ -12,9 +12,10 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[100],
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light
-            .copyWith(statusBarColor: const Color.fromARGB(255, 153, 37, 29)),
+            .copyWith(statusBarColor: Color.fromARGB(255, 30, 125, 52)),
         child: Column(
           children: [
             ClipPath(
@@ -23,10 +24,7 @@ class LoginPage extends StatelessWidget {
                 height: 150,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Color.fromARGB(255, 181, 25, 13),
-                      Colors.redAccent
-                    ],
+                    colors: [Color.fromARGB(255, 44, 91, 37), Colors.green],
                   ),
                 ),
               ),
@@ -44,16 +42,20 @@ class LoginPage extends StatelessWidget {
                       children: <Widget>[
                         TabBar(
                             labelColor: Colors.black,
-                            dividerColor: Colors.red[400],
-                            indicatorColor: Colors.red,
+                            dividerColor: Colors.green[300],
+                            indicatorColor: Colors.green[700],
                             tabs: [
                               Tab(
                                 child: Text("Login",
-                                    style: GoogleFonts.acme(fontSize: 25)),
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold)),
                               ),
                               Tab(
-                                child: Text("signup",
-                                    style: GoogleFonts.acme(fontSize: 25)),
+                                child: Text("Signup",
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold)),
                               )
                             ]),
                         const Expanded(

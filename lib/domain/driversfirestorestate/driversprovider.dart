@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class Driversprovider extends ChangeNotifier {
   Driverdata driver = Driverdata();
 
-  /// notusing for reference
+  /// notusing only use for reference
 
   Future getdata(
       {required Map<String, dynamic> data,

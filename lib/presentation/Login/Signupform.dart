@@ -1,9 +1,5 @@
 import 'package:assignment/domain/stateauth/authentication_provider.dart';
-import 'package:assignment/infrastructure/core/provider/providers.dart';
-import 'package:assignment/presentation/Login/Loginform.dart';
-import 'package:assignment/presentation/Login/Loginpage.dart';
 import 'package:assignment/presentation/Login/const.dart';
-import 'package:assignment/presentation/home/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,8 +11,8 @@ class Signupform extends ConsumerWidget {
     final auth = Authprovider();
     final email = TextEditingController();
     final password = TextEditingController();
-    final data = ref.watch(authProvider);
-    Enum? value = Enum.admin;
+    ref.watch(authProvider);
+
     final _formkey = GlobalKey<FormState>();
 
     return Form(
@@ -66,11 +62,13 @@ class Signupform extends ConsumerWidget {
                 ],
               ),
               auth.isloading
-                  ? const Center(
+                  ? Center(
                       child: SizedBox(
                         width: 50,
                         height: 50,
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: Colors.green[100],
+                        ),
                       ),
                     )
                   : Container(),

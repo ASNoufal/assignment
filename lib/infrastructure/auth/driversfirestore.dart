@@ -1,4 +1,3 @@
-import 'package:assignment/application/model/datamodel.dart';
 import 'package:assignment/domain/auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

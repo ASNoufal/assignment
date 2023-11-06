@@ -1,12 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:assignment/infrastructure/core/provider/providers.dart';
-import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:riverpod/src/framework.dart';
 
 import 'package:assignment/domain/auth/auth.dart';
-import 'package:assignment/domain/authfailures/authfailures.dart';
 
 class Authentication extends Iauthservice {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;

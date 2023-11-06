@@ -14,7 +14,9 @@ class UpdatePage extends ConsumerWidget {
 
     final updatdata = TextEditingController(text: data["name"]);
     return Scaffold(
+      backgroundColor: Colors.green[100],
       appBar: AppBar(
+        backgroundColor: Colors.green[700],
         title: const Text("Update"),
       ),
       body: Padding(
@@ -27,6 +29,8 @@ class UpdatePage extends ConsumerWidget {
               decoration: const InputDecoration(label: Text("Name")),
             ),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[700]),
                 onPressed: () {
                   final data = {"name": updatdata.text};
                   ref

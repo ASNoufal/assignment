@@ -1,11 +1,8 @@
-import 'package:assignment/domain/authfailures/authfailures.dart';
 import 'package:assignment/domain/stateauth/authentication_provider.dart';
 import 'package:assignment/domain/stateauth/authentication_state.dart';
 import 'package:assignment/presentation/Login/const.dart';
 import 'package:assignment/presentation/NavigationPage/driverHomePage.dart';
-import 'package:assignment/presentation/NavigationPage/geolocation.dart';
 import 'package:assignment/presentation/home/homepage.dart';
-import 'package:assignment/presentation/managingdetails/RetailStores/RetailStorescreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,11 +41,10 @@ class Loginform extends ConsumerWidget {
                         ref.read(userloginformstate.notifier).setemail(value!);
                       },
                       controller: email,
-                      cursorColor: const Color.fromARGB(255, 107, 104, 104),
+                      cursorColor: Color.fromARGB(255, 44, 150, 79),
                       decoration: formfielddecoration("Email"),
                     ),
-                    if (validator.errormessage.isNotEmpty &&
-                        validator.errormessage != null)
+                    if (validator.errormessage.isNotEmpty)
                       Text(
                         validator.errormessage,
                         style: TextStyle(color: Colors.red),
@@ -98,8 +94,10 @@ class Loginform extends ConsumerWidget {
                   ],
                 ),
                 authnotifier.isloading == true
-                    ? const Center(
-                        child: CircularProgressIndicator(),
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.green[100],
+                        ),
                       )
                     : const SizedBox()
               ],
